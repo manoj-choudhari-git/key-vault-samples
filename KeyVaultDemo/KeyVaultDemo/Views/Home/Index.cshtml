@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2 class="display-4">Welcome</h2>
+<br />
+<br />
+<form method="post" enctype="multipart/form-data" asp-controller="FileUpload" asp-action="Index">
+    <div class="card">
+        <div class="card-header">
+            <strong> Upload one or more files</strong>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <input type="file" name="files" multiple />
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <input type="submit" class="btn-primary" value="Upload to server" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
