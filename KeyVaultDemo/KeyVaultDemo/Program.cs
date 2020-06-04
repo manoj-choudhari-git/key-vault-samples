@@ -38,7 +38,7 @@ namespace KeyVaultDemo
                     webBuilder.UseStartup<Startup>();
                 });
 
-        private static string GetKeyVaultEndpoint() => "https://netcoreappvault.vault.azure.net";
+        private static string GetKeyVaultEndpoint() => "https://yourkeyvault.vault.azure.net";
 
     }
 }
