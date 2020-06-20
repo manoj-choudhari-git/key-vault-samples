@@ -23,10 +23,23 @@ namespace KeyVaultDemo
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
                 {
+                    // User assigned managed identity to access key vault (works only from app service, not from VS)
+                    var userAssignedManagedIdentityConnString = "RunAs=App;AppId={User_Assigned_Managed_Identity_ID};";
+
+                    // Service principal with client secret (Works from both VS and App Service)
+                    var clientSecretConnectionString = "RunAs=App;AppId={ClientID};TenantId={TenantID};Appkey={ClientSecret};";
+
+                    // Service principal with certificate thumbprint (Works from both VS and App Service)
+                    var certThumbprintConnectionString = "RunAs=App;AppId={ClientID};TenantId={TenantID};CertificateThumbprint={Thumbprint}; CertificateStoreLocation ={CurrentUser or LocalMachine}";
+
+                    // Service Principal with certificate subject (Works from both VS and App Service)
+                    var certSubjectConnectionString = "RunAs=App;AppId={ClientID};TenantId={TenantID};CertificateThumbprint={Subject}; CertificateStoreLocation ={CurrentUser or LocalMachine}";
+
                     var keyVaultEndpoint = GetKeyVaultEndpoint();
                     if (!string.IsNullOrEmpty(keyVaultEndpoint))
                     {
-                        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                        // Pass appropriate connection string 
+                        var azureServiceTokenProvider = new AzureServiceTokenProvider(certThumbprintConnectionString);
                         var keyVaultClient = new KeyVaultClient(
                             new KeyVaultClient.AuthenticationCallback(
                                 azureServiceTokenProvider.KeyVaultTokenCallback));
@@ -38,7 +51,7 @@ namespace KeyVaultDemo
                     webBuilder.UseStartup<Startup>();
                 });
 
-        private static string GetKeyVaultEndpoint() => "https://yourkeyvault.vault.azure.net";
+        private static string GetKeyVaultEndpoint() => "https://<<key-vault-name>>.vault.azure.net";
 
     }
 }
